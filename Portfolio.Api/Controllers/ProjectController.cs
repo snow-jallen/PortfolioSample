@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Portfolio.Api.Data;
-using Portfolio.Api.Models;
+using Portfolio.Shared;
 
 namespace Portfolio.Api.Controllers
 {

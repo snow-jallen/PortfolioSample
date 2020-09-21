@@ -1,0 +1,39 @@
+﻿@page "/"
+@inject HttpClient http
+@using Portfolio.Shared
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+<h3>Add a project</h3>
+<input @bind-value="newProjectName">
+<button @onclick="addProject">Add Project</button>
+<hr/>
+<h3>List of Projects</h3>
+<ul>
+    @foreach(var p in projects)
+    {
+        <li>@p.Title</li>
+    }
+</ul>
+
+@code {
+    private string newProjectName;
+    private IEnumerable<Project> projects = new List<Project>();
+
+    private async Task addProject()
+    {
+        var project = new Project{
+            Title = newProjectName
+        };
+        //http.PostAsJsonAsync(")
+    }
+
+    protected override async Task  OnInitializedAsync()
+    {
+        projects = await http.GetFromJsonAsync<IEnumerable<Project>>("/api/project/");
+    }
+}
