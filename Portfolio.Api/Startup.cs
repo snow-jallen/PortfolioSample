@@ -29,6 +29,17 @@ namespace Portfolio.Api
             services.AddControllers();
             services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(convertUrlConnectionString(Configuration["DATABASE_URL"])));
             services.AddTransient<IRepository, EfCoreRepository>();
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                               .AllowAnyMethod()
+                               .AllowAnyHeader();
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,6 +52,8 @@ namespace Portfolio.Api
 
             app.UseRouting();
 
+            app.UseCors();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -51,8 +64,16 @@ namespace Portfolio.Api
 
         private static string convertUrlConnectionString(string url)
         {
+            if (url is null)
+            {
+                throw new ArgumentNullException(nameof(url));
+            }
+
             if (!url.Contains("//"))
+            {
                 return url;
+            }
+
             var uri = new Uri(url);
             var host = uri.Host;
             var port = uri.Port;

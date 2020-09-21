@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Portfolio.BlazorServer.Data;
+using Portfolio.BlazorWasm;
 
 namespace Portfolio.BlazorServer
 {
@@ -29,7 +30,10 @@ namespace Portfolio.BlazorServer
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
-            services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            services.AddHttpClient<ProjectApiService>(client =>
+            {
+                client.BaseAddress = new Uri("http://localhost:5005");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

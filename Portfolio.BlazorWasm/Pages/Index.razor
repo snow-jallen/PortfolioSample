@@ -1,5 +1,6 @@
 ﻿@page "/"
-@inject HttpClient http
+@inject Portfolio.BlazorWasm.ProjectApiService projectApi
+
 @using Portfolio.Shared
 
 <h1>Hello, world!</h1>
@@ -12,6 +13,7 @@ Welcome to your new app.
 <input @bind-value="newProjectName">
 <button @onclick="addProject">Add Project</button>
 <hr/>
+<button @onclick="GetProjects">Load Project List</button>
 <h3>List of Projects</h3>
 <ul>
     @foreach(var p in projects)
@@ -29,11 +31,17 @@ Welcome to your new app.
         var project = new Project{
             Title = newProjectName
         };
-        //http.PostAsJsonAsync(")
+        await projectApi.AddProjectAsync(project);
+
+    }
+
+    private async Task GetProjects()
+    {
+        projects = await projectApi.GetProjectsAsync();
     }
 
     protected override async Task  OnInitializedAsync()
     {
-        projects = await http.GetFromJsonAsync<IEnumerable<Project>>("/api/project/");
+
     }
 }

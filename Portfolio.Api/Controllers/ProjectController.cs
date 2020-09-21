@@ -22,7 +22,7 @@ namespace Portfolio.Api.Controllers
         }
 
         [HttpGet()]
-        public async Task<IEnumerable<Project>> Get() => await repository.Projects.ToListAsync();
+        public async Task<List<Project>> Get() => await repository.Projects.ToListAsync();
 
         [HttpGet("[action]")]
         public async Task DefaultData()
@@ -39,6 +39,12 @@ namespace Portfolio.Api.Controllers
                 Title = "Project 2",
                 Requirements = "No, seriously. Do that."
             });
+        }
+
+        [HttpPost()]
+        public async Task Post(Project project)
+        {
+            await repository.SaveProjectAsync(project);
         }
     }
 }
