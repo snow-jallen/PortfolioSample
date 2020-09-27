@@ -1,5 +1,8 @@
 ﻿@page "/"
 @inject Portfolio.BlazorWasm.ProjectApiService projectApi
+@inject HttpClient http
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration config
 
 @using Portfolio.Shared
 
@@ -8,6 +11,8 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+<div>Base Address: @http.BaseAddress</div>
+<div>Config: @config["ConfigValue"]</div>
 
 <h3>Add a project</h3>
 <input @bind-value="newProjectName">
@@ -32,7 +37,7 @@ Welcome to your new app.
             Title = newProjectName
         };
         await projectApi.AddProjectAsync(project);
-
+        
     }
 
     private async Task GetProjects()
