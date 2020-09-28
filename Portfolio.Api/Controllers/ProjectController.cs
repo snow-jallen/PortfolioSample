@@ -22,7 +22,13 @@ namespace Portfolio.Api.Controllers
         }
 
         [HttpGet()]
-        public async Task<List<Project>> Get() => await repository.Projects.ToListAsync();
+        public async Task<List<Project>> Get()
+        {
+            return await repository.Projects
+                .Include(p=>p.ProjectCategories)
+                    .ThenInclude(pc => pc.Category)
+                .ToListAsync();
+        }
 
         [HttpGet("[action]")]
         public async Task DefaultData()
@@ -48,8 +54,13 @@ namespace Portfolio.Api.Controllers
         }
 
         [HttpGet("projectdetails/{id}")]
-        public string Details(int id)
+        public async Task<string> Details(int id)
         {
+            var allProjects = await repository.Projects
+               .Include(p => p.ProjectCategories)
+                   .ThenInclude(pc => pc.Category)
+               .ToListAsync();
+
             return $"You asked for details of {id}";
         }
 
@@ -57,6 +68,12 @@ namespace Portfolio.Api.Controllers
         public string ProjDetails(int id)
         {
             return $"You asked for details of {id}";
+        }
+
+       [HttpPost("[action]")]
+       public async Task AssignCategory(ProjectCategory projectCategory)
+        {
+            await repository.AssignCategoryAsync(projectCategory);
         }
     }
 }
