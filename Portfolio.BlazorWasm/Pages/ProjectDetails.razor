@@ -1,4 +1,5 @@
-﻿@page "/projectdetails/{ProjectId:int}"
+﻿@page "/projectdetails"
+@page "/projectdetails/{ProjectId:int}"
 @inject ProjectApiService api
 <h3>Project @ProjectId - @(SelectedProject?.Title ?? "NoProjectFound")</h3>
 
