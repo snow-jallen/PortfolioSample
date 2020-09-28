@@ -30,14 +30,14 @@
 
 @code {
     private string newProjectName;
-    private IEnumerable<Project> projects = new List<Project>();
+    private IEnumerable<Portfolio.Shared.Project> projects = new List<Portfolio.Shared.Project>();
 
     private async Task addProject()
     {
-        var project = new Project{
+        var project = new Portfolio.Shared.Project{
             Title = newProjectName,
         };
-        await projectApi.AddProjectAsync(project);        
+        await projectApi.AddProjectAsync(project);
     }
 
     private async Task GetProjects()
