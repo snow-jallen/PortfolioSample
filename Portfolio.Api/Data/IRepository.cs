@@ -10,5 +10,7 @@ namespace Portfolio.Api.Data
     {
         IQueryable<Project> Projects { get; }
         Task SaveProjectAsync(Project project);
+        Task AddCategoryAsync(Category category);
+        Task AssignCategoryAsync(ProjectCategory projectCategory);
     }
 }

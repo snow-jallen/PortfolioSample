@@ -19,5 +19,7 @@ namespace Portfolio.Shared
 
         [JsonPropertyName("requirements")]
         public string Requirements { get; set; }
+
+        public List<ProjectCategory> ProjectCategories { get; set; }
     }
 }
