@@ -37,7 +37,9 @@
         var project = new Portfolio.Shared.Project{
             Title = newProjectName,
         };
-        await projectApi.AddProjectAsync(project);
+        newProjectName = null;
+        await projectApi.SaveProjectAsync(project);
+        await GetProjects();
     }
 
     private async Task GetProjects()

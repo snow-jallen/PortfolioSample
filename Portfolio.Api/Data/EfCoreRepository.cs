@@ -32,7 +32,14 @@ namespace Portfolio.Api.Data
 
         public async Task SaveProjectAsync(Project project)
         {
-            context.Projects.Add(project);
+            if (project.Id == 0)
+            {
+                context.Projects.Add(project);
+            }
+            else
+            {
+                context.Projects.Update(project);
+            }
             await context.SaveChangesAsync();
         }
 

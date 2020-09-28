@@ -24,7 +24,7 @@ namespace Portfolio.BlazorWasm
             return await client.GetFromJsonAsync<IEnumerable<Project>>("api/project");
         }
 
-        public async Task AddProjectAsync(Project project)
+        public async Task SaveProjectAsync(Project project)
         {
             await client.PostAsJsonAsync("api/project", project);
         }

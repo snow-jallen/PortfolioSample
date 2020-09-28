@@ -2,12 +2,23 @@
 @inject ProjectApiService api
 <h3>Project @ProjectId - @(SelectedProject?.Title ?? "NoProjectFound")</h3>
 
+<div>Title</div>
+<div class="form-group">
+    <input type="text" @bind-value="@SelectedProject.Title" />
+</div>
+
+<div>Requirements</div>
+<div class="form-group">
+    <textarea @bind="@SelectedProject.Requirements" />
+</div>
+
+<button @onclick="saveProject">Save Changes</button>
 
 @code {
     [Parameter]
     public int ProjectId{get;set;}
 
-    public Project SelectedProject{get; set;}
+    public Project SelectedProject{get; set;} = new Project();
 
     protected override async Task OnInitializedAsync()
     {
@@ -15,6 +26,11 @@
             return;
         var projects = (await api.GetProjectsAsync());
         SelectedProject = projects.FirstOrDefault(p=>p.Id == ProjectId);
+    }
+
+    private async Task saveProject()
+    {
+        await api.SaveProjectAsync(SelectedProject);
     }
 
 }

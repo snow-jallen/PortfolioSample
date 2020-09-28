@@ -30,6 +30,7 @@ namespace Portfolio.BlazorServer
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
+            services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5005") });
             services.AddHttpClient<ProjectApiService>(client =>
             {
                 client.BaseAddress = new Uri("http://localhost:5005");
