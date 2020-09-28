@@ -1,0 +1,20 @@
+﻿@page "/projectdetails/{ProjectId:int}"
+@inject ProjectApiService api
+<h3>Project @ProjectId - @(SelectedProject?.Title ?? "NoProjectFound")</h3>
+
+
+@code {
+    [Parameter]
+    public int ProjectId{get;set;}
+
+    public Project SelectedProject{get; set;}
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(ProjectId == 0)
+            return;
+        var projects = (await api.GetProjectsAsync());
+        SelectedProject = projects.FirstOrDefault(p=>p.Id == ProjectId);
+    }
+
+}
