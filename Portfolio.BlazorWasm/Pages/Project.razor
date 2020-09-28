@@ -1,0 +1,19 @@
+﻿@page "/project"
+@inject IRepository repository
+<h3>Project</h3>
+
+
+@code {
+    [Parameter]
+    public int ProjectId{get;set;}
+
+    public Project Project{get; set;}
+
+    protected override async Task OnIntializedAsync()
+    {
+        if(ProjectId == 0)
+            return;
+
+        project = await repository.GetProjectByIDAsync(ProjectId);
+    }
+}

@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portfolio.Api", "Portfolio.Api\Portfolio.Api.csproj", "{4C753805-E61B-45EF-AB18-DF0600E85488}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portfolio.BlazorWasm", "Portfolio.BlazorWasm\Portfolio.BlazorWasm.csproj", "{9B139947-D464-4ED2-8803-E63CACECA258}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portfolio.BlazorWasm", "Portfolio.BlazorWasm\Portfolio.BlazorWasm.csproj", "{9B139947-D464-4ED2-8803-E63CACECA258}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portfolio.Shared", "Portfolio.Shared\Portfolio.Shared.csproj", "{488F5A34-DF58-499D-B68F-9F2767C7322D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portfolio.Shared", "Portfolio.Shared\Portfolio.Shared.csproj", "{488F5A34-DF58-499D-B68F-9F2767C7322D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portfolio.BlazorServer", "Portfolio.BlazorServer\Portfolio.BlazorServer.csproj", "{D9DE8276-5D59-4C82-AB00-63AA0FE2F67A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portfolio.BlazorServer", "Portfolio.BlazorServer\Portfolio.BlazorServer.csproj", "{D9DE8276-5D59-4C82-AB00-63AA0FE2F67A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

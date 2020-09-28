@@ -46,5 +46,17 @@ namespace Portfolio.Api.Controllers
         {
             await repository.SaveProjectAsync(project);
         }
+
+        [HttpGet("projectdetails/{id}")]
+        public string Details(int id)
+        {
+            return $"You asked for details of {id}";
+        }
+
+        [HttpGet("[action]/{id}")]
+        public string ProjDetails(int id)
+        {
+            return $"You asked for details of {id}";
+        }
     }
 }
