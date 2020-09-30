@@ -1,19 +1,37 @@
-﻿@page "/project"
+﻿@page "/project/{Id:int}"
+@inject Portfolio.BlazorWasm.ProjectApiService projectApi
+<h3>Project @SelectedProject.Id</h3>
+<h4>@SelectedProject.Title</h4>
+<p>@SelectedProject.Requirements</p>
 
-<h3>Project</h3>
-
+<div>
+<div>Language</div>
+<div><input @bind-value="newLanguage" /><button @onclick="assignLanguage">Add</button></div>
+<ul>
+    @foreach(var lang in SelectedProject.ProjectLanguages)
+    {
+        <li><a href="langauges/@lang.Id">@lang.Language.Name</a></li>
+    }
+</ul>
+</div>
 
 @code {
     [Parameter]
-    public int ProjectId{get;set;}
+    public int Id{get;set;}
+    string newLanguage;
 
-    public Project SelectedProject{get; set;}
+    public Portfolio.Shared.Project SelectedProject{get; set;} = new Portfolio.Shared.Project();
 
     protected override async Task OnInitializedAsync()
     {
-        if(ProjectId == 0)
+        if(Id == 0)
             return;
 
-        //SelectedProject = await repository.GetProjectByIDAsync(ProjectId);
+        SelectedProject = await projectApi.GetProjectByIDAsync(Id);
+    }
+
+    private async Task assignLanguage()
+    {
+        await projectApi.AssignAsync(Portfolio.Shared.Project.LanguageCategory, SelectedProject.Id, newLanguage);
     }
 }

@@ -28,5 +28,21 @@ namespace Portfolio.BlazorWasm
         {
             await client.PostAsJsonAsync("api/project", project);
         }
+
+        public async Task<Project> GetProjectByIDAsync(int id)
+        {
+            return await client.GetFromJsonAsync<Project>($"api/project/{id}");
+        }
+
+        public async Task AssignAsync(string categoryType, int projectId, string newName)
+        {
+            var assignBody = new AssignRequest
+            {
+                CategoryType = categoryType,
+                Name = newName,
+                ProjectId = projectId
+            };
+            await client.PostAsJsonAsync($"api/project/assign/", assignBody);
+        }
     }
 }

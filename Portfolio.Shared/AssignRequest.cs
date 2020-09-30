@@ -4,11 +4,10 @@ using System.Text;
 
 namespace Portfolio.Shared
 {
-    public class Category
+    public class AssignRequest
     {
-        public int Id { get; set; }
+        public string CategoryType { get; set; }
         public string Name { get; set; }
-
-        public List<ProjectCategory> ProjectCategories { get; set; }
+        public int ProjectId { get; set; }
     }
 }
