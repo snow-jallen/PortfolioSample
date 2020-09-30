@@ -1,5 +1,5 @@
 ﻿@page "/project"
-@inject IRepository repository
+
 <h3>Project</h3>
 
 
@@ -7,13 +7,13 @@
     [Parameter]
     public int ProjectId{get;set;}
 
-    public Project Project{get; set;}
+    public Project SelectedProject{get; set;}
 
-    protected override async Task OnIntializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         if(ProjectId == 0)
             return;
 
-        project = await repository.GetProjectByIDAsync(ProjectId);
+        //SelectedProject = await repository.GetProjectByIDAsync(ProjectId);
     }
 }
