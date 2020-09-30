@@ -1,4 +1,5 @@
 ﻿using Portfolio.Shared;
+using Portfolio.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +19,10 @@ namespace Portfolio.BlazorWasm
             this.client = client;
         }
 
-        public async Task<IEnumerable<Project>> GetProjectsAsync()
+        public async Task<IEnumerable<ProjectViewModel>> GetProjectsAsync()
         {
             var response = await client.GetAsync("api/project");
-            return await client.GetFromJsonAsync<IEnumerable<Project>>("api/project");
+            return await client.GetFromJsonAsync<IEnumerable<ProjectViewModel>>("api/project");
         }
 
         public async Task SaveProjectAsync(Project project)
@@ -29,9 +30,9 @@ namespace Portfolio.BlazorWasm
             await client.PostAsJsonAsync("api/project", project);
         }
 
-        public async Task<Project> GetProjectByIDAsync(int id)
+        public async Task<ProjectViewModel> GetProjectByIDAsync(int id)
         {
-            return await client.GetFromJsonAsync<Project>($"api/project/{id}");
+            return await client.GetFromJsonAsync<ProjectViewModel>($"api/project/{id}");
         }
 
         public async Task AssignAsync(string categoryType, int projectId, string newName)

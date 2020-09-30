@@ -2,6 +2,7 @@
 @inject Portfolio.BlazorWasm.ProjectApiService projectApi
 @inject HttpClient http
 @using Microsoft.Extensions.Configuration
+@using Portfolio.Shared.ViewModels
 @inject IConfiguration config
 
 @using Portfolio.Shared
@@ -30,14 +31,14 @@
 
 @code {
     private string newProjectName;
-    private IEnumerable<Portfolio.Shared.Project> projects = new List<Portfolio.Shared.Project>();
+    private IEnumerable<ProjectViewModel> projects = new List<ProjectViewModel>();
 
     private async Task addProject()
     {
         var project = new Portfolio.Shared.Project{
             Title = newProjectName,
         };
-        await projectApi.AddProjectAsync(project);
+        await projectApi.SaveProjectAsync(project);
     }
 
     private async Task GetProjects()

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Portfolio.Api.Data;
 using Portfolio.Shared;
+using Portfolio.Shared.ViewModels;
 
 namespace Portfolio.Api.Controllers
 {
@@ -22,11 +23,12 @@ namespace Portfolio.Api.Controllers
         }
 
         [HttpGet()]
-        public async Task<List<Project>> Get()
+        public async Task<List<ProjectViewModel>> Get()
         {
             return await repository.Projects
                 .Include(p=>p.ProjectLanguages)
                     .ThenInclude(pc => pc.Language)
+                .Select(p => new ProjectViewModel(p))
                 .ToListAsync();
         }
 
@@ -54,14 +56,15 @@ namespace Portfolio.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<Project> Details(int id)
+        public async Task<ProjectViewModel> GetProject(int id)
         {
             var project = await repository.Projects
                .Include(p => p.ProjectLanguages)
                    .ThenInclude(pc => pc.Language)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
-            return project;
+
+            return new ProjectViewModel(project);
         }
 
        [HttpPost("[action]")]
