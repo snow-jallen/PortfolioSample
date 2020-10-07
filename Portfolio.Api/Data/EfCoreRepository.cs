@@ -48,10 +48,12 @@ namespace Portfolio.Api.Data
         {
             if (project.Id == 0)
             {
+                project.Slug = project.Title.ToSlug();
                 context.Projects.Add(project);
             }
             else
             {
+                project.Slug = project.Title.ToSlug();
                 context.Projects.Update(project);
             }
             await context.SaveChangesAsync();

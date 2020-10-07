@@ -55,7 +55,7 @@ namespace Portfolio.Api.Controllers
             await repository.SaveProjectAsync(project);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ProjectViewModel> GetProject(int id)
         {
             var project = await repository.Projects
@@ -65,6 +65,23 @@ namespace Portfolio.Api.Controllers
 
 
             return new ProjectViewModel(project);
+        }
+
+        [HttpGet("{slug}")]
+        public async Task<ProjectViewModel> GetProject(string slug)
+        {
+            try
+            {
+                var project = await repository.Projects
+                   .Include(p => p.ProjectLanguages)
+                       .ThenInclude(pc => pc.Language)
+                    .FirstOrDefaultAsync(p => p.Slug == slug);
+                return new ProjectViewModel(project);
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
         }
 
        [HttpPost("[action]")]

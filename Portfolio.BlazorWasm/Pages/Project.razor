@@ -1,4 +1,4 @@
-﻿@page "/project/{Id:int}"
+﻿@page "/project/{slug}"
 @inject Portfolio.BlazorWasm.ProjectApiService projectApi
 @using Portfolio.Shared.ViewModels
 
@@ -20,19 +20,23 @@
 @code {
     [Parameter]
     public int Id{get;set;}
+
+    [Parameter]
+    public string Slug{get;set;}
+
     string newLanguage;
 
     public ProjectViewModel SelectedProject{get; set;} = new ProjectViewModel();
 
     protected override async Task OnInitializedAsync()
     {
-        if(Id == 0)
+        if(Id == 0 && Slug == null)
             return;
 
         await refreshAsync();
     }
 
-    async Task refreshAsync() => SelectedProject = await projectApi.GetProjectByIDAsync(Id);
+    async Task refreshAsync() => SelectedProject = await projectApi.GetProjectBySlugAsync(Slug);
 
     private async Task assignLanguage()
     {

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Routing;
+using Portfolio.Shared;
 
 namespace Portfolio.BlazorWasm
 {
@@ -20,6 +22,10 @@ namespace Portfolio.BlazorWasm
             var baseAddress = builder.Configuration["HttpClientBaseAddress"];
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseAddress) });
             builder.Services.AddScoped<ProjectApiService>();
+            builder.Services.Configure<RouteOptions>(options =>
+            {
+                options.ConstraintMap.Add("slug", typeof(SlugParameterTransformer));
+            });
 
             await builder.Build().RunAsync();
         }

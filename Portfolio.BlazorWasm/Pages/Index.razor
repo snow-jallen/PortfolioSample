@@ -4,6 +4,7 @@
 @using Microsoft.Extensions.Configuration
 @using Portfolio.Shared.ViewModels
 @inject IConfiguration config
+@using Polly;
 
 @using Portfolio.Shared
 
@@ -25,7 +26,7 @@
 <ul>
     @foreach(var p in projects)
     {
-        <li><a href="project/@p.Id">@p.Title</a></li>
+        <li><a href="project/@p.Title.ToSlug()">@p.Title</a><br/></li>
     }
 </ul>
 
@@ -43,7 +44,14 @@
 
     private async Task GetProjects()
     {
-        projects = await projectApi.GetProjectsAsync();
+        await Polly.Policy
+            .Handle<TimeoutException>()
+            .WaitAndRetryForever(retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
+            .Execute(async ()=>
+            {
+                System.Diagnostics.Debug.WriteLine("Trying to make the call again...");
+                projects = await projectApi.GetProjectsAsync();
+            });
     }
 
     protected override async Task  OnInitializedAsync()
