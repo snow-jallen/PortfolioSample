@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Portfolio.BlazorWasm
 {
-    public class ProjectApiService
+    public class ProjectApiService : IProjectApiService
     {
         private readonly HttpClient client;
 

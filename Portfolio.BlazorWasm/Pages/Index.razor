@@ -1,6 +1,5 @@
 ﻿@page "/"
 @inject Portfolio.BlazorWasm.ProjectApiService projectApi
-@inject HttpClient http
 @using Microsoft.Extensions.Configuration
 @using Portfolio.Shared.ViewModels
 @inject IConfiguration config
@@ -9,9 +8,6 @@
 @using Portfolio.Shared
 
 <h1>Portfolio Sample</h1>
-
-<div>Base Address: @http.BaseAddress</div>
-<div>Config: @config["ConfigValue"]</div>
 
 <h3>Add a project</h3>
 <div class="form-field">
