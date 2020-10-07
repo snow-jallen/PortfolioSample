@@ -25,6 +25,7 @@ namespace Portfolio.Shared
         public string Requirements { get; set; }
 
         public List<ProjectLanguage> ProjectLanguages { get; set; }
+
         public string Slug { get; set; }
     }
 }

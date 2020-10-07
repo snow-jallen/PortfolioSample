@@ -20,11 +20,13 @@ namespace Portfolio.Shared.ViewModels
             Title = p.Title;
             Requirements = p.Requirements;
             Languages = new List<LanguageViewModel>(p.ProjectLanguages.Select(pl => new LanguageViewModel(pl.Language)));
+            Slug = p.Slug;
         }
 
         public int Id { get; set; }
         public string Title { get; set; }
         public string Requirements { get; set; }
         public IList<LanguageViewModel> Languages { get; set; }
+        public string Slug { get; set; }
     }
 }
