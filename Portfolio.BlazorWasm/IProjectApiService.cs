@@ -11,6 +11,6 @@ namespace Portfolio.BlazorWasm
         Task<ProjectViewModel> GetProjectByIDAsync(int id);
         Task<ProjectViewModel> GetProjectBySlugAsync(string slug);
         Task<IEnumerable<ProjectViewModel>> GetProjectsAsync();
-        Task SaveProjectAsync(Project project);
+        Task SaveProjectAsync(ProjectViewModel project);
     }
 }

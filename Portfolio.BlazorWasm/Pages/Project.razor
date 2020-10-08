@@ -4,7 +4,9 @@
 
 <h3>Project @SelectedProject.Id</h3>
 <h4>@SelectedProject.Title</h4>
-<p>@SelectedProject.Requirements</p>
+<textarea @bind=SelectedProject.Requirements></textarea>
+<button @onclick=saveProject>Save Project</button>
+<MarkdownView Content="@SelectedProject.Requirements" />
 
 <div>
 <div>Language</div>
@@ -42,5 +44,10 @@
     {
         await projectApi.AssignAsync(Portfolio.Shared.Project.LanguageCategory, SelectedProject.Id, newLanguage);
         await refreshAsync();
+    }
+
+    private async Task saveProject()
+    {
+        await projectApi.SaveProjectAsync(SelectedProject);
     }
 }

@@ -32,7 +32,7 @@
 
     private async Task addProject()
     {
-        var project = new Portfolio.Shared.Project{
+        var project = new Portfolio.Shared.ViewModels.ProjectViewModel{
             Title = newProjectName,
         };
         await projectApi.SaveProjectAsync(project);

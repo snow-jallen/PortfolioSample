@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using Portfolio.Shared;
+using Portfolio.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,16 +46,20 @@ namespace Portfolio.Api.Data
             }
         }
 
-        public async Task SaveProjectAsync(Project project)
+        public async Task SaveProjectAsync(ProjectViewModel projectVM)
         {
-            if (project.Id == 0)
+            var project = await context.Projects.FindAsync(projectVM.Id);
+            if(project == null)
             {
+                project = new Project(projectVM);
                 project.Slug = project.Title.ToSlug();
                 context.Projects.Add(project);
             }
             else
             {
                 project.Slug = project.Title.ToSlug();
+                project.Requirements = projectVM.Requirements;
+                project.Title = projectVM.Title;
                 context.Projects.Update(project);
             }
             await context.SaveChangesAsync();

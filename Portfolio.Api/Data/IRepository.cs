@@ -1,4 +1,5 @@
 ﻿using Portfolio.Shared;
+using Portfolio.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Portfolio.Api.Data
     public interface IRepository
     {
         IQueryable<Project> Projects { get; }
-        Task SaveProjectAsync(Project project);
+        Task SaveProjectAsync(ProjectViewModel project);
         Task AssignCategoryAsync(AssignRequest assignRequest);
     }
 }

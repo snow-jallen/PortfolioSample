@@ -35,14 +35,14 @@ namespace Portfolio.Api.Controllers
         [HttpGet("[action]")]
         public async Task DefaultData()
         {
-            await repository.SaveProjectAsync(new Project
+            await repository.SaveProjectAsync(new ProjectViewModel
             {
                 Title = "Project 1",
                  Requirements = "Demonstrate APIs with a database"
             });
 
 
-            await repository.SaveProjectAsync(new Project
+            await repository.SaveProjectAsync(new ProjectViewModel
             {
                 Title = "Project 2",
                 Requirements = "No, seriously. Do that."
@@ -50,7 +50,7 @@ namespace Portfolio.Api.Controllers
         }
 
         [HttpPost()]
-        public async Task Post(Project project)
+        public async Task Post(ProjectViewModel project)
         {
             await repository.SaveProjectAsync(project);
         }

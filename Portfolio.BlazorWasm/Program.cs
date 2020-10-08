@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Http;
 using Microsoft.AspNetCore.Routing;
 using Portfolio.Shared;
+using Ganss.XSS;
 
 namespace Portfolio.BlazorWasm
 {
@@ -22,8 +23,16 @@ namespace Portfolio.BlazorWasm
 
             var baseAddress = builder.Configuration["HttpClientBaseAddress"];
             //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseAddress) });
-            builder.Services.AddHttpClient<ProjectApiService>(hc => hc.BaseAddress = new Uri(baseAddress));
             //builder.Services.AddScoped<ProjectApiService>();
+            builder.Services.AddHttpClient<ProjectApiService>(hc => hc.BaseAddress = new Uri(baseAddress));
+            builder.Services.AddScoped<IHtmlSanitizer, HtmlSanitizer>(x =>
+            {
+                // Configure sanitizer rules as needed here.
+                // For now, just use default rules + allow class attributes
+                var sanitizer = new Ganss.XSS.HtmlSanitizer();
+                sanitizer.AllowedAttributes.Add("class");
+                return sanitizer;
+            });
             builder.Services.Configure<RouteOptions>(options =>
             {
                 options.ConstraintMap.Add("slug", typeof(SlugParameterTransformer));
