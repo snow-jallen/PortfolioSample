@@ -20,6 +20,11 @@ namespace Portfolio.BlazorWasm
             var baseAddress = builder.Configuration["HttpClientBaseAddress"];
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseAddress) });
             builder.Services.AddScoped<ProjectApiService>();
+            builder.Services.AddOidcAuthentication(options =>
+            {
+                builder.Configuration.Bind("Auth0", options.ProviderOptions);
+                options.ProviderOptions.ResponseType = "code";
+            });
 
             await builder.Build().RunAsync();
         }
