@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Portfolio.Api.Data;
+using Microsoft.OpenApi.Models;
 
 namespace Portfolio.Api
 {
@@ -51,6 +52,11 @@ namespace Portfolio.Api
                 options.Authority = "https://dev-h2j88mri.us.auth0.com/";
                 options.Audience = "https://portfolio-snow-jallen.herokuapp.com/";
             });
+
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Portfolio", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,6 +77,12 @@ namespace Portfolio.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Portfolio");
             });
         }
 

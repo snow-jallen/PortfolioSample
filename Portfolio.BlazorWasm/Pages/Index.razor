@@ -1,15 +1,13 @@
 ﻿@page "/"
 @inject Portfolio.BlazorWasm.ProjectApiService projectApi
-@inject HttpClient http
 @using Microsoft.Extensions.Configuration
+@using Portfolio.Shared.ViewModels
 @inject IConfiguration config
+@using Polly;
 
 @using Portfolio.Shared
 
 <h1>Portfolio Sample</h1>
-
-<div>Base Address: @http.BaseAddress</div>
-<div>Config: @config["ConfigValue"]</div>
 
 <h3>Add a project</h3>
 <div class="form-field">
@@ -24,27 +22,32 @@
 <ul>
     @foreach(var p in projects)
     {
-        <li><a href="ProjectDetails/@p.Id">@p.Title</a></li>
+        <li><a href="project/@p.Slug">@p.Title</a><br/></li>
     }
 </ul>
 
 @code {
     private string newProjectName;
-    private IEnumerable<Portfolio.Shared.Project> projects = new List<Portfolio.Shared.Project>();
+    private IEnumerable<ProjectViewModel> projects = new List<ProjectViewModel>();
 
     private async Task addProject()
     {
-        var project = new Portfolio.Shared.Project{
+        var project = new Portfolio.Shared.ViewModels.ProjectViewModel{
             Title = newProjectName,
         };
-        newProjectName = null;
         await projectApi.SaveProjectAsync(project);
-        await GetProjects();
     }
 
     private async Task GetProjects()
     {
-        projects = await projectApi.GetProjectsAsync();
+        await Polly.Policy
+            .Handle<TimeoutException>()
+            .WaitAndRetryForever(retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
+            .Execute(async ()=>
+            {
+                System.Diagnostics.Debug.WriteLine("Trying to make the call again...");
+                projects = await projectApi.GetProjectsAsync();
+            });
     }
 
     protected override async Task  OnInitializedAsync()

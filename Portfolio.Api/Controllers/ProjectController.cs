@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Portfolio.Api.Data;
 using Portfolio.Shared;
+using Portfolio.Shared.ViewModels;
 
 namespace Portfolio.Api.Controllers
 {
@@ -24,25 +25,26 @@ namespace Portfolio.Api.Controllers
         }
 
         [HttpGet()]
-        public async Task<List<Project>> Get()
+        public async Task<List<ProjectViewModel>> Get()
         {
             return await repository.Projects
-                .Include(p=>p.ProjectCategories)
-                    .ThenInclude(pc => pc.Category)
+                .Include(p=>p.ProjectLanguages)
+                    .ThenInclude(pc => pc.Language)
+                .Select(p => new ProjectViewModel(p))
                 .ToListAsync();
         }
 
         [HttpGet("[action]")]
         public async Task DefaultData()
         {
-            await repository.SaveProjectAsync(new Project
+            await repository.SaveProjectAsync(new ProjectViewModel
             {
                 Title = "Project 1",
                  Requirements = "Demonstrate APIs with a database"
             });
 
 
-            await repository.SaveProjectAsync(new Project
+            await repository.SaveProjectAsync(new ProjectViewModel
             {
                 Title = "Project 2",
                 Requirements = "No, seriously. Do that."
@@ -50,32 +52,44 @@ namespace Portfolio.Api.Controllers
         }
 
         [HttpPost()]
-        public async Task Post(Project project)
+        public async Task Post(ProjectViewModel project)
         {
             await repository.SaveProjectAsync(project);
         }
 
-        [HttpGet("projectdetails/{id}")]
-        public async Task<string> Details(int id)
+        [HttpGet("{id:int}")]
+        public async Task<ProjectViewModel> GetProject(int id)
         {
-            var allProjects = await repository.Projects
-               .Include(p => p.ProjectCategories)
-                   .ThenInclude(pc => pc.Category)
-               .ToListAsync();
+            var project = await repository.Projects
+               .Include(p => p.ProjectLanguages)
+                   .ThenInclude(pc => pc.Language)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
-            return $"You asked for details of {id}";
+
+            return new ProjectViewModel(project);
         }
 
-        [HttpGet("[action]/{id}")]
-        public string ProjDetails(int id)
+        [HttpGet("{slug}")]
+        public async Task<ProjectViewModel> GetProject(string slug)
         {
-            return $"You asked for details of {id}";
+            try
+            {
+                var project = await repository.Projects
+                   .Include(p => p.ProjectLanguages)
+                       .ThenInclude(pc => pc.Language)
+                    .FirstOrDefaultAsync(p => p.Slug == slug);
+                return new ProjectViewModel(project);
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
         }
 
        [HttpPost("[action]")]
-       public async Task AssignCategory(ProjectCategory projectCategory)
+       public async Task Assign(AssignRequest assignRequest)
         {
-            await repository.AssignCategoryAsync(projectCategory);
+            await repository.AssignCategoryAsync(assignRequest);
         }
     }
 }

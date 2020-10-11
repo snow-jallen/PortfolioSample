@@ -1,5 +1,8 @@
-﻿using Microsoft.VisualBasic;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using Portfolio.Shared;
+using Portfolio.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,26 +21,45 @@ namespace Portfolio.Api.Data
 
         public IQueryable<Project> Projects => context.Projects;
 
-        public async Task AddCategoryAsync(Category category)
+        public async Task AssignCategoryAsync(AssignRequest assignRequest)
         {
-            context.Categories.Add(category);
-            await context.SaveChangesAsync();
-        }
-
-        public async Task AssignCategoryAsync(ProjectCategory projectCategory)
-        {
-            context.ProjectCategories.Add(projectCategory);
-            await context.SaveChangesAsync();
-        }
-
-        public async Task SaveProjectAsync(Project project)
-        {
-            if (project.Id == 0)
+            switch (assignRequest.CategoryType)
             {
+                case Project.LanguageCategory:
+                    var language = await context.Languages.FirstOrDefaultAsync(l => l.Name == assignRequest.Name);
+                    if(language == null)
+                    {
+                        language = new Language { Name = assignRequest.Name };
+                        context.Languages.Add(language);
+                        await context.SaveChangesAsync();
+                    }
+                    var lc = new ProjectLanguage
+                    {
+                        ProjectId = assignRequest.ProjectId,
+                        LanguageId = language.Id
+                    };
+                    context.ProjectLanguages.Add(lc);
+                    await context.SaveChangesAsync();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public async Task SaveProjectAsync(ProjectViewModel projectVM)
+        {
+            var project = await context.Projects.FindAsync(projectVM.Id);
+            if(project == null)
+            {
+                project = new Project(projectVM);
+                project.Slug = project.Title.ToSlug();
                 context.Projects.Add(project);
             }
             else
             {
+                project.Slug = project.Title.ToSlug();
+                project.Requirements = projectVM.Requirements;
+                project.Title = projectVM.Title;
                 context.Projects.Update(project);
             }
             await context.SaveChangesAsync();

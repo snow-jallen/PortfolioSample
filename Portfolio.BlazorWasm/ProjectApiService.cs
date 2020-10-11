@@ -1,4 +1,5 @@
 ﻿using Portfolio.Shared;
+using Portfolio.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Portfolio.BlazorWasm
 {
-    public class ProjectApiService
+    public class ProjectApiService : IProjectApiService
     {
         private readonly HttpClient client;
 
@@ -18,15 +19,36 @@ namespace Portfolio.BlazorWasm
             this.client = client;
         }
 
-        public async Task<IEnumerable<Project>> GetProjectsAsync()
+        public async Task<IEnumerable<ProjectViewModel>> GetProjectsAsync()
         {
             var response = await client.GetAsync("api/project");
-            return await client.GetFromJsonAsync<IEnumerable<Project>>("api/project");
+            return await client.GetFromJsonAsync<IEnumerable<ProjectViewModel>>("api/project");
         }
 
-        public async Task SaveProjectAsync(Project project)
+        public async Task SaveProjectAsync(ProjectViewModel project)
         {
             await client.PostAsJsonAsync("api/project", project);
+        }
+
+        public async Task<ProjectViewModel> GetProjectByIDAsync(int id)
+        {
+            return await client.GetFromJsonAsync<ProjectViewModel>($"api/project/{id}");
+        }
+
+        public async Task<ProjectViewModel> GetProjectBySlugAsync(string slug)
+        {
+            return await client.GetFromJsonAsync<ProjectViewModel>($"api/project/{slug}");
+        }
+
+        public async Task AssignAsync(string categoryType, int projectId, string newName)
+        {
+            var assignBody = new AssignRequest
+            {
+                CategoryType = categoryType,
+                Name = newName,
+                ProjectId = projectId
+            };
+            await client.PostAsJsonAsync($"api/project/assign/", assignBody);
         }
     }
 }

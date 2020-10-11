@@ -1,0 +1,53 @@
+﻿@page "/project/{slug}"
+@inject Portfolio.BlazorWasm.ProjectApiService projectApi
+@using Portfolio.Shared.ViewModels
+
+<h3>Project @SelectedProject.Id</h3>
+<h4>@SelectedProject.Title</h4>
+<textarea @bind=SelectedProject.Requirements></textarea>
+<button @onclick=saveProject>Save Project</button>
+<MarkdownView Content="@SelectedProject.Requirements" />
+
+<div>
+<div>Language</div>
+<div><input @bind-value="newLanguage" /><button @onclick="assignLanguage">Add</button></div>
+<ul>
+    @foreach(var lang in SelectedProject.Languages)
+    {
+        <li><a href="langauges/@lang.Id">@lang.Name</a></li>
+    }
+</ul>
+</div>
+
+@code {
+    [Parameter]
+    public int Id{get;set;}
+
+    [Parameter]
+    public string Slug{get;set;}
+
+    string newLanguage;
+
+    public ProjectViewModel SelectedProject{get; set;} = new ProjectViewModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(Id == 0 && Slug == null)
+            return;
+
+        await refreshAsync();
+    }
+
+    async Task refreshAsync() => SelectedProject = await projectApi.GetProjectBySlugAsync(Slug);
+
+    private async Task assignLanguage()
+    {
+        await projectApi.AssignAsync(Portfolio.Shared.Project.LanguageCategory, SelectedProject.Id, newLanguage);
+        await refreshAsync();
+    }
+
+    private async Task saveProject()
+    {
+        await projectApi.SaveProjectAsync(SelectedProject);
+    }
+}
