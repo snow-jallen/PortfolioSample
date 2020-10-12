@@ -6,6 +6,7 @@
 <h4>@SelectedProject.Title</h4>
 <textarea @bind=SelectedProject.Requirements></textarea>
 <button @onclick=saveProject>Save Project</button>
+
 <MarkdownView Content="@SelectedProject.Requirements" />
 
 <div>

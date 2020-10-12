@@ -1,0 +1,25 @@
+﻿@inject Portfolio.BlazorWasm.ProjectApiService projectApi
+
+
+<h3>@Heading</h3>
+<div class="form-field">
+    <input placeholder="project name" @bind-value="newProjectName">
+</div>
+<div class="form-field">
+    <button @onclick="addProject">Add Project</button>
+</div>
+
+@code {
+    private string newProjectName;
+
+    [Parameter]
+    public string Heading{get;set;}
+
+    private async Task addProject()
+    {
+        var project = new Portfolio.Shared.ViewModels.ProjectViewModel{
+            Title = newProjectName,
+        };
+        await projectApi.SaveProjectAsync(project);
+    }
+}
