@@ -15,20 +15,8 @@
 
 @code {
     private IEnumerable<ProjectViewModel> projects = new List<ProjectViewModel>();
-    private async Task GetProjects()
-    {
-        await Polly.Policy
-            .Handle<TimeoutException>()
-            .WaitAndRetryForever(retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
-            .Execute(async ()=>
-            {
-                System.Diagnostics.Debug.WriteLine("Trying to make the call again...");
-                projects = await projectApi.GetProjectsAsync();
-            });
-    }
 
-    protected override async Task  OnInitializedAsync()
-    {
-        await GetProjects();
-    }
+    private async Task GetProjects() => projects = await projectApi.GetProjectsAsync();
+
+    protected override async Task  OnInitializedAsync() => await GetProjects();
 }
