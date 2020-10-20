@@ -1,11 +1,14 @@
 ﻿@page "/"
-@inject Portfolio.BlazorWasm.ProjectApiService projectApi
+@attribute [Authorize]
+
 @using Microsoft.Extensions.Configuration
 @using Portfolio.Shared.ViewModels
-@inject IConfiguration config
 @using Polly;
-
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using System.Net.Http.Headers
 @using Portfolio.Shared
+
+@inject Portfolio.BlazorWasm.ProjectApiService projectApi
 
 <h1>Portfolio Sample</h1>
 
@@ -40,18 +43,18 @@
 
     private async Task GetProjects()
     {
-        await Polly.Policy
-            .Handle<TimeoutException>()
-            .WaitAndRetryForever(retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
-            .Execute(async ()=>
-            {
-                System.Diagnostics.Debug.WriteLine("Trying to make the call again...");
-                projects = await projectApi.GetProjectsAsync();
-            });
+        try
+        {
+            projects = await projectApi.GetProjectsAsync();
+        }
+        catch(AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
     }
 
     protected override async Task  OnInitializedAsync()
     {
-        await GetProjects();
+        //await GetProjects();
     }
 }

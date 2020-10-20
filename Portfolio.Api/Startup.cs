@@ -50,7 +50,7 @@ namespace Portfolio.Api
             }).AddJwtBearer(options =>
             {
                 options.Authority = "https://dev-h2j88mri.us.auth0.com/";
-                options.Audience = "https://portfolio-snow-jallen.herokuapp.com/";
+                options.Audience = "https://portfolio2.snow.edu";
             });
 
             services.AddSwaggerGen(options =>
