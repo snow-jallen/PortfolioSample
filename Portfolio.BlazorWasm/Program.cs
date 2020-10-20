@@ -23,12 +23,20 @@ namespace Portfolio.BlazorWasm
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
+            builder.Services.AddOidcAuthentication(options =>
+            {
+                builder.Configuration.Bind("Auth0", options.ProviderOptions);
+                options.ProviderOptions.ResponseType = "code";
+            });
+
+            builder.Services.AddScoped<Auth0AuthorizationMessageHandler>();
+
             var baseAddress = builder.Configuration["HttpClientBaseAddress"];
-            //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseAddress) });
-            //builder.Services.AddScoped<ProjectApiService>();
             builder.Services.AddHttpClient<ProjectApiService>(hc => hc.BaseAddress = new Uri(baseAddress))
+                .AddHttpMessageHandler<Auth0AuthorizationMessageHandler>()
                 .SetHandlerLifetime(TimeSpan.FromMinutes(5))
                 .AddPolicyHandler(GetRetryPolicy());
+
             builder.Services.AddScoped<IHtmlSanitizer, HtmlSanitizer>(x =>
             {
                 // Configure sanitizer rules as needed here.
@@ -37,6 +45,7 @@ namespace Portfolio.BlazorWasm
                 sanitizer.AllowedAttributes.Add("class");
                 return sanitizer;
             });
+
             builder.Services.Configure<RouteOptions>(options =>
             {
                 options.ConstraintMap.Add("slug", typeof(SlugParameterTransformer));

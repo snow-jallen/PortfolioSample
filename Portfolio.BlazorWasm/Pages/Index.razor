@@ -1,6 +1,8 @@
 ﻿@page "/"
-@using Microsoft.Extensions.Configuration
+@attribute [Authorize]
 
+@using Microsoft.Extensions.Configuration
+@using Portfolio.Shared.ViewModels
 @inject IConfiguration config
 @using Polly;
 

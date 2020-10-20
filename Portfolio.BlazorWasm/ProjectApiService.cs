@@ -1,4 +1,5 @@
-﻿using Portfolio.Shared;
+﻿using static System.Diagnostics.Debug;
+using Portfolio.Shared;
 using Portfolio.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -7,21 +8,24 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using System.Net.Http.Headers;
 
 namespace Portfolio.BlazorWasm
 {
     public class ProjectApiService : IProjectApiService
     {
         private readonly HttpClient client;
+        private readonly IAccessTokenProvider tokenProvider;
 
-        public ProjectApiService(HttpClient client)
+        public ProjectApiService(HttpClient client, IAccessTokenProvider tokenProvider)
         {
             this.client = client;
+            this.tokenProvider = tokenProvider;
         }
 
         public async Task<IEnumerable<ProjectViewModel>> GetProjectsAsync()
         {
-            var response = await client.GetAsync("api/project");
             return await client.GetFromJsonAsync<IEnumerable<ProjectViewModel>>("api/project");
         }
 
