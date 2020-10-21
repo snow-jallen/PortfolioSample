@@ -27,6 +27,7 @@ namespace Portfolio.BlazorWasm
             {
                 builder.Configuration.Bind("Auth0", options.ProviderOptions);
                 options.ProviderOptions.ResponseType = "code";
+                options.ProviderOptions.DefaultScopes.Add("https://schemas.dev-h2j88rmi.com/roles");
             });
 
             builder.Services.AddScoped<Auth0AuthorizationMessageHandler>();

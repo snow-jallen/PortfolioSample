@@ -46,11 +46,16 @@ namespace Portfolio.Api
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;                
             }).AddJwtBearer(options =>
             {
                 options.Authority = "https://dev-h2j88mri.us.auth0.com/";
                 options.Audience = "https://portfolio2.snow.edu";
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    NameClaimType = "Roles",
+                    RoleClaimType = "https://schemas.dev-h2j88rmi.com/roles"
+                };
             });
 
             services.AddSwaggerGen(options =>

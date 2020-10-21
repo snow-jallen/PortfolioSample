@@ -16,6 +16,15 @@
 
 <ProjectList />
 
+<AuthorizeView Roles="admin">
+    <Authorized>
+        <p>You're in the admin group!</p>
+    </Authorized>
+    <NotAuthorized>
+        <p>NOT AN ADMIN!</p>
+    </NotAuthorized>
+</AuthorizeView>
+
 @code {
 
 
